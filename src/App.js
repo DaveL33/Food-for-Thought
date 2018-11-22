@@ -32,35 +32,14 @@ export class App extends Component {
   }
 
   fetchData() {
-    /*
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": "https://api.yelp.com/v3/businesses/search?location=98105&price=1",
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer y6ejhnqhtEk8B98G2JP-_WR9-sNpB_ELeiG-Hh4l5FVrqy67Yg_ypYpWnXShYcoKu39n_UsNlAIzHUJryWSWcR7M0w8_FDNPILRfvL7nss6iFRf7864tBRw9tlzzW3Yx",
-        "cache-control": "no-cache",
-        "Postman-Token": "766a33bc-b1d2-4c25-b63a-d115b0e3b150"
-      },
-      "processData": false,
-      "data": ""
-    }
-    
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-    });
-    */
 
-    let url = 'https://api.yelp.com/v3/businesses/search';
-    url +=('?location='+ this.state.zip + '&price=' + this.state.money);
+    
+   let url = 'https://developers.zomato.com/api/v2.1/location_details?entity_id=279&entity_type=city';
     return fetch(url, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer y6ejhnqhtEk8B98G2JP-_WR9-sNpB_ELeiG-Hh4l5FVrqy67Yg_ypYpWnXShYcoKu39n_UsNlAIzHUJryWSWcR7M0w8_FDNPILRfvL7nss6iFRf7864tBRw9tlzzW3Yx",
-        "cache-control": "no-cache"
+        "user-key": 'd0325b0e365e86fe688a11fe58eaf786'
       }
     })
     .then(function(response) {
@@ -71,7 +50,7 @@ export class App extends Component {
     })
     .catch(function(error) {
       console.error(error);
-    }); 
+    });  
   }
   
   render() {
