@@ -22,6 +22,96 @@
   color: #61dafb;
 }
 
+div.bodyContainer {
+  height:100vh;
+  width:100vw;
+  display:flex;
+  align-content: center;
+  align-items:center;
+  background-color:#e74c3c;
+  color:#efefef;
+}
+
+div.container {
+  height:50%;
+  width:75%;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+}
+
+div.container h1 {
+  font-size:5rem;
+}
+
+div.container div.introContainer {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+}
+
+div.zipMoney {
+  display:flex;
+  width:100%;
+  justify-content: center;
+}
+
+div.zipCode, div.money {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content: center;
+}
+
+div.zipCode input {
+  width:100%;
+}
+
+div.money h6 {
+  width:100%;
+  display:flex;
+  justify-content: center;
+}
+
+div.zipMoney > div {
+  margin:15px;
+}
+
+div.arrowSubmit {
+  font-size:1.5rem;
+  color:#efefef;
+  animation:next 1s ease-in-out infinite;
+}
+
+@keyframes next {
+  0% {
+    transform:translateX(0);
+  } 50% {
+    transform:translateX(20px);
+  } 100% {
+    transform:translateX(0px);
+  }
+}
+
+div.footer {
+  width:70%;
+  display:flex;
+  justify-content: flex-end;
+  align-items:center;
+}
+
+div.categoryCard {
+  height:200px;
+  width:200px;
+  background-color:#c0392b;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  border-radius:10%;
+  margin:15px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
