@@ -2,6 +2,7 @@ import React, { Component } from 'react'; //import React Component
 //import './style.css';
 import 'whatwg-fetch';
 import './App.css';
+import {Grid, Row, Col} from 'react-bootstrap'
 //var rapid = new RapidAPI("default-application_5bf3605ee4b02e4415402cd8", "99f1d82f-be7b-42ee-9ec2-b4f3c7f8c138");
 import $ from 'jquery'; 
 
@@ -37,7 +38,9 @@ export class App extends Component {
       introComp:false,
       categoryComp:true,
       restaurantsComp:true,
-      categoryID:[]
+      resultsComp:true,
+      categoryID:[], 
+      price:0
     }
   }
 
@@ -54,19 +57,37 @@ export class App extends Component {
     this.setState({
       introComp:true,
       categoryComp:true,
-      restaurantsComp:false
+      restaurantsComp:false,
+      resultsComp:true
     });
     
+  }
+
+  chosenRestaurants = (state) => {
+    this.setState(state);
+    this.setState({
+      introComp:true,
+      categoryComp:true,
+      restaurantsComp:true,
+      resultsComp:false
+    });
+  }
+
+  handlePrice = (state) => {
+    this.setState({price:state.price});
+    console.log("money");
+    console.log(this.state);
   }
   
   render() {
     return (
       <div className="bodyContainer">
         <div className="container">
-          <h1>Food for Thought</h1>
-          <Intro active={this.state.introComp} data={this.handle}></Intro>
+          <h1 >Food for Thought</h1>
+          <Intro active={this.state.introComp} priceRange={this.handlePrice} data={this.handle}></Intro>
           <Category idChosen={this.chosen} data={this.state} active={this.state.categoryComp}></Category>
-          <Restaurants active={this.state.restaurantsComp} data={this.state}></Restaurants>
+          <Restaurants restaurantsChosen={this.chosenRestaurants}active={this.state.restaurantsComp} data={this.state}></Restaurants>
+          <Results data={this.state} active={this.state.resultsComp}></Results>
         </div>
       </div>
 
@@ -80,7 +101,8 @@ class Intro extends Component {
     this.state = {
       cityName:"",
       category:[],
-      cityID:null
+      cityID:null,
+      price:0
     }
   }
 
@@ -150,28 +172,70 @@ class Intro extends Component {
     this.fetchCityData()
   }
 
+  handlePrice = (state) => {
+    this.setState({price:state.price});
+    this.props.priceRange(this.state);
+  };
+
   render() {
     return(
       <div hidden={this.props.active} className="introContainer">
         <div className="introContent">
           <h5><strong>Food for Thoughts</strong> is an app that helps users decide what restaurant to eat at.</h5>
-          <p>Input your zip code and amount of money your willing to spend below to get started!</p>
+          <p>Input your city name below to get started!</p>
         </div>
         <div className="zipMoney">
           <div className="zipCode">
-            <input onChange={this.handleChange} type="textarea"/>
-            <label>Zip Code</label>
-          </div>
-          <div className="money">
-            <h6>$$$</h6>
-            <label>Price Range</label>
+            <input placeholder="Enter city name" onChange={this.handleChange} type="textarea"/>
+            <label>City Name</label>
           </div>
         </div>
         <div className="footer">
-          <div onClick={this.fetchData}className="arrowSubmit">
+          <div onClick={this.fetchData} className="arrowSubmit">
             >>>
           </div>
         </div>
+      </div>
+    );
+  }
+}
+
+class Price extends Component {
+  constructor(props) {
+    super();
+    let list = this.setRange();
+    this.state = {
+      range:list,
+      price:0
+    }
+  }
+
+  highlight = (event) => {
+    let price = parseInt(event.target.id);
+    this.setState({price:price});
+    this.props.priceRange(this.state);
+  }
+
+  componentDidMount() {
+  }
+
+  setRange() {
+    let temp = ['$', '$', '$'];
+    let counter = 1;
+    let list = temp.map(symbol => {
+      let comp = <span onClick={this.highlight} id={counter} className="dollar">{symbol}</span>;
+      counter++;
+      return comp;
+    });
+    return list;
+  }
+
+  render() {
+
+    return(
+      <div className="money">
+        {this.state.range}
+        <label>Price Range</label>
       </div>
     );
   }
@@ -196,9 +260,11 @@ class Category extends Component {
     let data = this.props.data;
     console.log(data)
     return (
-      <div hidden={this.props.active}>
-        <h5>To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
-        <p>Select your preferred category below.</p>
+      <div className="categoryContainer" hidden={this.props.active}>
+        <div>
+          <h5>To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
+          <p>Select your preferred category below.</p>
+        </div>
         <CuisineList catID={this.handle} data={data}></CuisineList>
       </div>
     );
@@ -211,11 +277,20 @@ class Card extends Component {
   }
   render() {
     let category = this.props.category;
+    let comp;
+    if(category.address != undefined) {
+      comp = <div className="info">
+        <h6>{category.address}</h6>
+        <h6>{category.rating}</h6>
+        <h6>{category.price}</h6>
+      </div>
+    }
     return(
-      <div data-key={category.id} className="categoryCard">
-        <h3>
+      <div onClick={this.props.onClick} data-key={category.id} className="categoryCard">
+        <h5 className="categoryName">
           {category.name}
-        </h3>
+        </h5>
+        {comp}
       </div>
     );
   }
@@ -244,7 +319,11 @@ class CuisineList extends Component {
     let data = this.props.data.category;
     console.log(data);
     let categories = data.map(category => {
-      let comp = <Card category={category}></Card>
+      let comp = 
+          <Col xs={12} md={3}>
+            <Card category={category}></Card>
+          </Col>
+      
       return comp;
     });
     return(
@@ -253,6 +332,11 @@ class CuisineList extends Component {
           >>>
         </div>
         <div onClick={this.chosen}>
+          <Grid>
+            <Row>
+
+            </Row>
+          </Grid>
           {categories}
         </div>
       </div>
@@ -264,11 +348,23 @@ class Restaurants extends Component {
   constructor(props) {
     super();
     this.state = {
-      restaurants:null
+      restaurants:null,
+      eliminated:[]
     }
   }
 
-  fetchRestaurants(categoryIDs, cityID) {
+  handleClick = (event) => {
+    console.log(event);
+    console.log(event.currentTarget);
+    event.target.style.backgroundColor = "#f39c12";
+    this.state.eliminated.push(event.currentTarget.getAttribute("data-key"));
+  };
+
+  send = () => {
+    this.props.restaurantsChosen(this.state);
+  }
+
+  fetchRestaurants(categoryIDs, cityID, range) {
     if(categoryIDs != undefined && categoryIDs.length > 0) {
       let catID = categoryIDs[0];
       for(let i = 1; i < categoryIDs.length; i++) {
@@ -293,11 +389,18 @@ class Restaurants extends Component {
             name:restaurant.name,
             id:restaurant.id,
             address:restaurant.location.address,
-            price:restaurant.price_range
+            price:restaurant.price_range,
+            rating:restaurant.user_rating.rating_text
           }
-          let comp = <Card category={category}></Card>
+          let comp = <Col xs={12} md={3}>
+            <Card onClick={this.handleClick} category={category}></Card>
+          </Col>
           return comp;
         })
+        /*
+        list = list.filter(obj => {
+          return obj.props.category.price == range;
+        });*/
         this.setState({restaurants:list});
         return list;
       })
@@ -314,17 +417,58 @@ class Restaurants extends Component {
   render() {
     let data = this.props.data;
     let categoryIDs = data.categoryID;
+    let range = data.price;
     let cityID = this.props.data.cityID;
-    this.fetchRestaurants(categoryIDs[0], cityID);
+    this.fetchRestaurants(categoryIDs[0], cityID, range);
     let restaurantsDisplay;
     if(this.state.restaurants != null) {
       restaurantsDisplay = this.state.restaurants;
     }
     return(
-      <div hidden={this.props.active}>
-        <h5>To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
-        <p>Select five restaurants from below.</p>
-        {restaurantsDisplay}
+      <div className="restaurantContainer" hidden={this.props.active}>
+        <div>
+          <h5>To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
+          <p>Eliminate two restaurants from below.</p>
+        </div>
+          <Row>
+            {restaurantsDisplay}
+          </Row>
+          <Row>
+            <div onClick={this.send} className="arrowSubmit">
+              >>>
+            </div>
+          </Row>
+      </div>
+    );
+  }
+}
+
+class Results extends Component {
+  constructor(props) {
+    super();
+  }
+
+  render() {
+    let data = this.props.data;
+    console.log(data);
+    let result;
+    if(data.restaurants != undefined) {
+      let eliminated = data.eliminated;
+      let restaurants = data.restaurants.filter(restaurant => {
+        let id = restaurant.props.children.props.category.id;
+        return eliminated.includes(id) == false
+      })
+      let index = Math.floor(Math.random() * restaurants.length);
+      console.log("carrot");
+      console.log(restaurants[index]);
+      console.log(restaurants[index].props);
+      result = <div><h6>Based off your preferences, this is the most ideal restaurant for you!</h6>
+      <Card category={restaurants[index].props.children.props.category}></Card></div>
+    }
+    
+    return(
+      <div className="resultContent">
+        {result}
       </div>
     );
   }
