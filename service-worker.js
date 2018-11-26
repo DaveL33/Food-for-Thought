@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/Food-for-Thought/precache-manifest.fa8e1b16150e298bfb015da275b59dd3.js"
+  "/Food-for-Thought/precache-manifest.e97ad12f5fcb5dc03532fa760d5206ef.js"
 );
 
 workbox.clientsClaim();
