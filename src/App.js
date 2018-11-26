@@ -83,7 +83,7 @@ export class App extends Component {
     return (
       <div className="bodyContainer">
         <div className="container">
-          <h1 >Food for Thought</h1>
+          <h1 aria-label="title">Food for Thought</h1>
           <Intro active={this.state.introComp} priceRange={this.handlePrice} data={this.handle}></Intro>
           <Category idChosen={this.chosen} data={this.state} active={this.state.categoryComp}></Category>
           <Restaurants restaurantsChosen={this.chosenRestaurants}active={this.state.restaurantsComp} data={this.state}></Restaurants>
@@ -181,12 +181,12 @@ class Intro extends Component {
     return(
       <div hidden={this.props.active} className="introContainer">
         <div className="introContent">
-          <h5><strong>Food for Thoughts</strong> is an app that helps users decide what restaurant to eat at.</h5>
-          <p>Input your city name below to get started!</p>
+          <h5 aria-label="description"><strong>Food for Thoughts</strong> is an app that helps users decide what restaurant to eat at.</h5>
+          <p aria-label="direction">Input your city name below to get started!</p>
         </div>
         <div className="zipMoney">
           <div className="zipCode">
-            <input placeholder="Enter city name" onChange={this.handleChange} type="textarea"/>
+            <input aria-label="input" placeholder="Enter city name" onChange={this.handleChange} type="textarea"/>
             <label>City Name</label>
           </div>
         </div>
@@ -262,8 +262,8 @@ class Category extends Component {
     return (
       <div className="categoryContainer" hidden={this.props.active}>
         <div>
-          <h5>To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
-          <p>Select your preferred category below.</p>
+          <h5 aria-label="description">To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
+          <p aria-label="direction">Select your preferred category below.</p>
         </div>
         <CuisineList catID={this.handle} data={data}></CuisineList>
       </div>
@@ -286,7 +286,7 @@ class Card extends Component {
       </div>
     }
     return(
-      <div onClick={this.props.onClick} data-key={category.id} className="categoryCard">
+      <div aria-label="choice" onClick={this.props.onClick} data-key={category.id} className="categoryCard">
         <h5 className="categoryName">
           {category.name}
         </h5>
@@ -328,7 +328,7 @@ class CuisineList extends Component {
     });
     return(
       <div>
-        <div onClick={this.send} className="arrowSubmit">
+        <div aria-label="submit" onClick={this.send} className="arrowSubmit">
           >>>
         </div>
         <div onClick={this.chosen}>
@@ -427,14 +427,14 @@ class Restaurants extends Component {
     return(
       <div className="restaurantContainer" hidden={this.props.active}>
         <div>
-          <h5>To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
-          <p>Eliminate two restaurants from below.</p>
+          <h5 aria-label="description">To fetch accurate restaurants that match your cravings, we'll need you to answer a few questions.</h5>
+          <p aria-label="direction">Eliminate two restaurants from below.</p>
         </div>
           <Row>
             {restaurantsDisplay}
           </Row>
           <Row>
-            <div onClick={this.send} className="arrowSubmit">
+            <div aria-label="submit" onClick={this.send} className="arrowSubmit">
               >>>
             </div>
           </Row>
@@ -467,7 +467,7 @@ class Results extends Component {
     }
     
     return(
-      <div className="resultContent">
+      <div aria-label="result" className="resultContent">
         {result}
       </div>
     );
