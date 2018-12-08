@@ -8,28 +8,6 @@ import $ from 'jquery';
 
 export class App extends Component {
 
-  /*fetchData() {
-
-    
-   let url = 'https://developers.zomato.com/api/v2.1/location_details?entity_id=279&entity_type=city';
-    return fetch(url, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "user-key": 'd0325b0e365e86fe688a11fe58eaf786'
-      }
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(response) {
-      console.log(response);
-    })
-    .catch(function(error) {
-      console.error(error);
-    });  
-  }*/
-
   constructor(props) {
     super();
     this.state = {
