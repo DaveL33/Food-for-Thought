@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/Food-for-Thought/precache-manifest.e97ad12f5fcb5dc03532fa760d5206ef.js"
+  "/the-top-stuff/precache-manifest.55a775782b42155b4137c4fce06892a0.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/Food-for-Thought/index.html", {
+workbox.routing.registerNavigationRoute("/the-top-stuff/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
